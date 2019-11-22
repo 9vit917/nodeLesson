@@ -1,0 +1,20 @@
+{
+    "questions":[
+        {
+            "question":"Are you gay?",
+            "answer": "No"
+        },
+        {
+            "question":"Are you dad?",
+            "answer": "No"
+        },
+        {
+            "question":"Are you man?",
+            "answer": "Yes"
+        },
+        {
+            "question":"Are you rich?",
+            "answer": "No"
+        }
+    ]
+}

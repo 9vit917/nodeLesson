@@ -1,0 +1,20 @@
+{
+    "articles":[
+        {
+            "id": 1,
+            "title": "Sport",
+            "text": "bla-bla-bla",
+            "date": 12,
+            "author": "Viktar",
+            "comments": [
+                {
+                    "id": 1,
+                    "articleId": 1,
+                    "text": "lalka",
+                    "date": 13,
+                    "author": "Kavi"
+                }
+            ]
+        }
+    ]
+}
