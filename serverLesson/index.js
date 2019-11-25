@@ -6,7 +6,8 @@ const port = 3000;
 
 const handlers = {
     '/sum': sum,
-    '/api/articles/readall': getAllArticles
+    '/api/articles/readall': getAllArticles,
+    '/api/articles/create': createArticle
 };
 
 let  myData= {};
@@ -21,7 +22,6 @@ const server = http.createServer((req, res) => {
             res.end(JSON.stringify(err));
             return
         }
-        console.log(result);
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
         res.end(JSON.stringify(result));
@@ -31,7 +31,9 @@ const server = http.createServer((req, res) => {
 
 server.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
-  data = getJSONFile();
+  
+  getJSONFile();
+  console.log(myData);
 });
 
 function sum(req, res, payload, cb) {
@@ -42,8 +44,13 @@ function sum(req, res, payload, cb) {
     cb(null, result);
 }
 
+function createArticle(req, res, payload, cb) {
+  console.log(payload);
+}
+
 function getAllArticles(req, res, payload, cb) {
-  cb(null, data);
+  console.log(payload);
+  cb(null, myData);
 }
 
 function getHandler(url) {
@@ -72,11 +79,11 @@ function parseBodyJson(req, cb) {
 }
 
 function getJSONFile() {
-  fs.readFile('./articles.json', 'json', 'utf8', (err, data) => {
-    if (err) throw err;
-    else {
-      data = JSON.parse(data);
+  fs.readFile('./articles.json', (err, data) => {
+    if (err) {
+      throw err;
+    } else {
+      myData = JSON.parse(data);
     }
   })
-  return require('./articles.json');
 }
