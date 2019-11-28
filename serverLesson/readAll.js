@@ -13,8 +13,52 @@ fs.readFile(JSONpath, (err, data) => {
     }
 })
 
+function getArticlesWithParametrs(data, cb) {
+    let articles = [];
+    json.articles.forEach(element => {
+        articles.push(Object.assign({}, element));
+    });
+    let renderData = {
+        items : [],
+        meta : {}
+    }
+    let sortJSON = articles.sort(articlesSort(data.sortField, data.sortOrder));
+    renderData.items = sortJSON;
+    data.page ? renderData.meta.page = data.page : renderData.meta.page = 1;
+    data.limit ? renderData.meta.limit = data.limit : renderData.meta.limit = 10;
+    renderData.meta.count = sortJSON.length;
+    renderData.meta.pages = Math.ceil(renderData.meta.count / renderData.meta.limit);
+    renderData.items = renderData.items.filter((el, i) => {
+        return i < (renderData.meta.limit * renderData.meta.page) && i >= (renderData.meta.limit * (renderData.meta.page - 1))
+    })
+    if(!data.includeDeps) {
+        renderData.items = renderData.items.map((el)=>{
+            delete el.comments;
+            return el;
+        })
+    }
+    cb(null, renderData)
+}
+
+function articlesSort(sortField, sortOrder) {
+    return function innerSort (a, b) {
+        let res = 0
+        if(a[sortField].toUpperCase() > b[sortField].toUpperCase()) {
+            res = 1;
+        }else if(a[sortField].toUpperCase() < b[sortField].toUpperCase()) {
+            res = -1;
+        }
+        return ((sortOrder === 'des') ? (res * -1) : res)
+    }
+}
+
 function getAllArticles(req, res, payload, cb) {
-    cb(null, json);
+    let keys = Object.keys(payload);
+    if(keys.indexOf('sortField') !== -1 && keys.indexOf('sortOrder') !== -1) {
+        getArticlesWithParametrs(payload, cb);
+    }else {
+        cb(null, json);
+    }
 }
 
 function getArticle(req, res, payload, cb){

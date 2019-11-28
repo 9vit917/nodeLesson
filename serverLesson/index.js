@@ -121,9 +121,6 @@ function deleteComment(req, res, payload, cb) {
   let myData = articles.getAllArticles();
   let commentForDelete = myData.articles.map((el)=>{return el.comments}).flat().filter((el)=>{return el.id === payload.id;})[0];
   let index = myData.articles.map((el)=>{return el.id}).indexOf(commentForDelete.articleId);
-  console.log(index)
-  console.log(commentForDelete)
-  console.log(myData.articles.map((el)=>{return el.id}))
   myData.articles[index].comments =  myData.articles[index].comments.filter((el) => {
     return el.id !== commentForDelete.id;
   })
